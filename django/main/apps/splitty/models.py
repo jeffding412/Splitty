@@ -6,7 +6,7 @@ class UserManager(models.Manager):
     def validator(self, postData):
         errors = {}
 
-        if len(postData['username']) < 1:
+        if len(postData['username'].replace(" ", "")) < 1:
             errors["username"] = "Username is a required field"
 
         if len(postData['password']) < 8:
@@ -14,7 +14,7 @@ class UserManager(models.Manager):
 
         user = User.objects.filter(username=postData['username'])
         if user and not bcrypt.checkpw(postData['password'].encode(), user[0].password_hash.encode()):
-            errors['failure'] = "Invalid Credentials"
+            errors['failure'] = "Invalid credentials"
 
         return errors
 
